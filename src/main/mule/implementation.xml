@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="e41eb23c-bdb6-4db4-b974-450ba6db1a4b" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" database="${db.dbname}"/>
+	</db:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="f64c12d6-d1a1-44e2-ae1c-9194e69d6a4e" file="dev.yaml" />
+	<flow name="get-libraries-implementationFlow" doc:id="3d09fe56-1652-4e19-85d8-35377df8de3f" >
+		<logger level="INFO" doc:name="Logger" doc:id="f753891c-310d-4fd5-a7d9-41123a47f32d" message="========flow started========"/>
+		<db:select doc:id="ce5dd962-3701-4613-ba13-dd2e822f3be0" config-ref="Database_Config" doc:name="mysqldb">
+			<db:sql ><![CDATA[select * from libraryinfo]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="3d66d036-3015-40a8-80ae-1d54824fde4b" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="libdboutput" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-payload value="#[vars.libdboutput]" doc:name="Set Payload" doc:id="b0debf10-0e7d-4d61-9497-f0d0862fcb26" />
+		<logger level="INFO" doc:name="Logger" doc:id="89741c25-de63-4034-ab35-59e603a3e351" message="======flow completed=======" />
+	</flow>
+</mule>
