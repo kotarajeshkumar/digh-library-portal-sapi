@@ -124,8 +124,6 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\libraries:digh-library-sys-api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="92029146-9605-4701-b4a6-74e3e3f9013c" message="get libraries flow started"/>
 		<flow-ref doc:name="get-libraries-implementationFlow" doc:id="e5c4ecf0-c464-4723-9fcc-d51458b44a5d" name="get-libraries-implementationFlow"/>
-		<logger level="INFO" doc:name="Logger" doc:id="f40904f1-92e0-4ac5-881e-e3729fc685ae" message="get libraries flow ended"/>
     </flow>
 </mule>
